@@ -1,0 +1,41 @@
+version: '2.1'
+
+networks:
+    myxmrnet: 
+    external:
+      name: Network
+
+services:
+
+  xmrminer:
+    restart: always
+    build: 
+        context: .
+        dockerfile: ./xmrig.Dockerfile
+    image: ravinayag/xmrig:latest
+    container_name: monerominer.kstech.com
+    hostname: monerominer.kstech.com
+    logging:
+        options:
+          max-size: 50m
+    environment:
+      - POOL_URL=us-west.minexmr.com:443
+      - POOL_USER=49szjjsAJxbdQnYTB4U5miTPx18FQAS3eSckd6ZArJtu429oHXtLa485G45CWPXuP2SX5fsNQhSgw4ALKGWdeShfU8gFyFZ
+      - POOL_PASS=
+      - DONATE_LEVEL=5
+      - PRIORITY=1
+      - THREADS=2
+      - ACCESS_TOKEN=
+      - ALGO=rx/0
+      - COIN=monero
+      - WORKER_NAME=xmRwallet786
+      - PORT=8000
+      - HHOST=0.0.0.0
+    ports:
+      - 8000:8000
+    volumes:
+      - ./config.json:/usr/local/bin/config.json
+    
+    command: xmrig --user=$POOL_USER --url=$POOL_URL $PASS_OPTS $CPU_THREADS --cpu-priority=$CPU_PRIORITY --donate-level=$DONATE_LEVEL --http-port=8000 --http-host=0.0.0.0 --http-enabled --http-access-token=$ACCESS_TOKEN $OTHERS_OPTS
+    networks:
+      - myxmrnet
